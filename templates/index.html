@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Binbox</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <div class="robot">
+          <div class="antenna">
+            <div class="antenna-tip"></div>
+          </div>
+          <div class="face">
+            <div class="eyes">
+              <div class="eye left">
+                <div class="pupil"></div>
+              </div>
+              <div class="eye right">
+                <div class="pupil"></div>
+              </div>
+            </div>
+            <div class="mouth"></div>
+          </div>
+          <div class="torso">
+            <div class="led led-left"></div>
+            <div class="led led-right"></div>
+          </div>
+        </div>
+        <div class="tagline">
+          <h1>Binbox</h1>
+          <p>My taste in music is rubbish :D</p>
+          <p class="instructions">
+            Drop litter in the bin to trigger the sensor and skip to the next song.
+            {% if simulator_mode %}
+            In simulator mode: press <span class="key">Space</span> to imitate the sensor.
+            {% endif %}
+          </p>
+        </div>
+      </section>
+
+      <section class="status">
+        <div class="card sensor">
+          <h2>Sensor</h2>
+          <div class="sensor-status" id="sensor-status">
+            <span class="dot" id="sensor-dot"></span>
+            <span id="sensor-text">Listening...</span>
+          </div>
+          <p class="count"><span id="count">0</span> items detected</p>
+        </div>
+
+        <div class="card music">
+          <h2>Now Playing</h2>
+          <p class="song" id="current-song">Waiting for litter...</p>
+          <h3>Up Next</h3>
+          <p class="song" id="next-song">Add songs to /songs</p>
+          <div class="song-meta">
+            <span id="song-count">0 songs in queue</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const SIMULATOR_MODE = {{ 'true' if simulator_mode else 'false' }};
+    </script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  </body>
+</html>
