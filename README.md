@@ -1,32 +1,28 @@
-# binbox
+# Binbox
 
-A Raspberry Pi + litter bin that plays rubbish music if you give it rubish.
+Cute robot UI for a Raspberry Pi bin that plays music when the sensor fires. Simulator mode lets you trigger with the spacebar on your PC.
 
-This repository hosts a small Flask app that powers the Binbox display and a lightweight music sequencer. It supports two modes:
+## Quick start (simulator / PC)
 
-- **Simulator mode (default on Windows):** Press spacebar to mimic the IR obstacle sensor.
-- **Pi mode:** Uses the IR sensor on a Raspberry Pi 3 (GPIO code is included but commented out for Windows development).
-
-## Getting started (simulator)
-
-1. Install dependencies:
+1. Install deps (prefer a venv):
    ```bash
-   pip install flask pygame
+   pip install -r requirements.txt
    ```
-2. Add some `.mp3` files to the `songs/` folder.
-3. Run the app:
+2. Drop `.mp3` files into `songs/`.
+3. Run:
    ```bash
    python app.py
    ```
-4. Open http://localhost:5000 and press **Space** to simulate litter hitting the sensor.
+4. Open http://localhost:5000 and press Space to trigger playback. Settings at http://localhost:5000/settings.
 
-## Hardware notes
+## Beat prep workflow
 
-- Pi-specific GPIO setup is commented out in `app.py` under the "Raspberry Pi IR obstacle sensor wiring" section. Uncomment and adjust the pin number for your wiring, then set `SIMULATOR_MODE = False`.
-- The sensor trigger calls `handle_sensor_event()`, which increments the bin count and advances the playlist.
+- On your PC with `librosa` installed, enable “Allow in-app beat analysis” in settings and click **Analyze songs**. This writes BPMs to `songs/bpms.json`.
+- Copy `songs/` (including `bpms.json`) to the Pi. On the Pi, leave analysis disabled; the UI will show BPMs from the cache without running librosa.
+- The BPM cache entries now look like `{ "YourSong.mp3": { "bpm": 120.0, "kickInDelay": 0.0 } }`. You can manually set `kickInDelay` (seconds) to delay head bobbing if a track has a long intro; defaults to 0.
 
-## Behavior
+## Notes
 
-- Songs in `songs/` (sorted alphabetically) play in sequence. Dropping litter (or pressing space) skips to the next track.
-- The UI shows: sensor activity, number of items detected, the current song, and the upcoming track.
-- When a track ends naturally, playback advances to the next song automatically; the only way to skip is to trigger the sensor again.
+- The app plays one track per trigger; the queue is ordered alphabetically by filename.
+- Robot head bops while music plays (if enabled in settings).
+- GPIO sensor code is stubbed; enable and wire on the Pi as needed. In simulator mode, Space triggers `/api/trigger`.

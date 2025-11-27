@@ -1,0 +1,8 @@
+{
+  "cooldown_seconds": 10.0,
+  "simulator_mode": true,
+  "theme_color": "#5ab0f6",
+  "head_bob_enabled": true,
+  "analysis_enabled": true,
+  "phase": 0.0
+}

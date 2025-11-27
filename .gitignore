@@ -5,7 +5,7 @@ __pycache__/
 
 
 # copyright
-.mp3
+*.mp3
 
 # C extensions
 *.so

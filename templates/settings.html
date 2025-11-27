@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Binbox Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    <main class="page settings-page">
+      <header class="settings-header">
+        <div>
+          <h1>Settings</h1>
+          <p>Adjust cooldown, theme, simulator, and beat prep.</p>
+        </div>
+        <a class="btn" href="/">← Back to Binbox</a>
+      </header>
+
+      <form id="settings-form" class="card settings-card">
+        <div class="field">
+          <label for="cooldown">Cooldown (seconds)</label>
+          <input type="number" step="0.1" min="0" id="cooldown" name="cooldown_seconds" value="{{ settings.get('cooldown_seconds', 10) }}" />
+        </div>
+
+        <div class="field">
+          <label for="theme_color">Theme color</label>
+          <input type="color" id="theme_color" name="theme_color" value="{{ settings.get('theme_color', '#5ab0f6') }}" />
+        </div>
+
+        <div class="field checkbox">
+          <label><input type="checkbox" id="simulator_mode" name="simulator_mode" {% if settings.get('simulator_mode') %}checked{% endif %} /> Simulator mode (spacebar trigger)</label>
+        </div>
+
+        <div class="field checkbox">
+          <label><input type="checkbox" id="analysis_enabled" name="analysis_enabled" {% if settings.get('analysis_enabled') %}checked{% endif %} /> Allow in-app beat analysis (PC only, requires librosa)</label>
+          <p class="help">Enable this on your PC to generate <code>songs/bpms.json</code> for the Pi.</p>
+        </div>
+
+        <div class="field checkbox">
+          <label><input type="checkbox" id="head_bob_enabled" name="head_bob_enabled" {% if settings.get('head_bob_enabled') %}checked{% endif %} /> Animate head bobbing while music plays</label>
+        </div>
+
+        <div class="field phase-control">
+          <label for="phase-slider">Head bob phase</label>
+          <input type="range" id="phase-slider" min="0" max="100" value="0" />
+          <span id="phase-value">0%</span>
+        </div>
+
+        <div class="field">
+          <label>Beat analysis (librosa)</label>
+          <div class="actions">
+            <button class="btn primary" type="button" id="analyze-btn">Analyze songs</button>
+            <span id="analysis-status">Status: idle</span>
+          </div>
+          <p class="help">
+            Runs BPM extraction for songs in /songs (librosa required) and writes the cache to <code>songs/bpms.json</code>.
+            Copy that file to the Pi so the UI shows BPM without running analysis there.
+          </p>
+        </div>
+
+        <div class="field sensor-test">
+          <label>Sensor test / diagnostics</label>
+          <div class="actions">
+            <button class="btn primary" type="button" id="sensor-test-btn">Start sensor test</button>
+            <span id="sensor-test-status">Idle</span>
+          </div>
+          <p class="help">
+            Use on the Pi to confirm the GPIO sensor is wired and firing. Shows raw pin reads, last rising/falling edge
+            times, whether GPIO is initialized, and recent errors. Leave this open and move something in front of the
+            sensor to watch it change between LOW/HIGH.
+          </p>
+          <pre class="sensor-test-output" id="sensor-test-output">Press "Start sensor test" to begin polling...</pre>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" type="submit">Save settings</button>
+          <span id="save-status" class="save-status">Idle</span>
+        </div>
+      </form>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+  </body>
+</html>

@@ -10,19 +10,21 @@
     <main class="page">
       <section class="hero">
         <div class="robot">
-          <div class="antenna">
-            <div class="antenna-tip"></div>
-          </div>
-          <div class="face">
-            <div class="eyes">
-              <div class="eye left">
-                <div class="pupil"></div>
-              </div>
-              <div class="eye right">
-                <div class="pupil"></div>
-              </div>
+          <div class="head" id="robot-head">
+            <div class="antenna">
+              <div class="antenna-tip"></div>
             </div>
-            <div class="mouth"></div>
+            <div class="face">
+              <div class="eyes">
+                <div class="eye left">
+                  <div class="pupil"></div>
+                </div>
+                <div class="eye right">
+                  <div class="pupil"></div>
+                </div>
+              </div>
+              <div class="mouth"></div>
+            </div>
           </div>
           <div class="torso">
             <div class="led led-left"></div>
@@ -33,11 +35,15 @@
           <h1>Binbox</h1>
           <p>My taste in music is rubbish :D</p>
           <p class="instructions">
-            Drop litter in the bin to trigger the sensor and skip to the next song.
+            Drop litter in the bin to trigger the sensor.
             {% if simulator_mode %}
-            In simulator mode: press <span class="key">Space</span> to imitate the sensor.
+            Press <span class="key">Space</span> in simulator mode.
             {% endif %}
           </p>
+          <div class="hero-actions">
+            <button class="btn primary" type="button" id="stop-btn">Stop music</button>
+            <a class="btn secondary" href="/settings">Settings</a>
+          </div>
         </div>
       </section>
 
@@ -48,23 +54,25 @@
             <span class="dot" id="sensor-dot"></span>
             <span id="sensor-text">Listening...</span>
           </div>
-          <p class="count"><span id="count">0</span> items detected</p>
+          <p class="count"><span id="count">0</span> bits of rubbish eaten today</p>
         </div>
 
         <div class="card music">
           <h2>Now Playing</h2>
           <p class="song" id="current-song">Waiting for litter...</p>
+          <p class="song-meta">Tempo: <span id="bpm">--</span> BPM</p>
           <h3>Up Next</h3>
           <p class="song" id="next-song">Add songs to /songs</p>
           <div class="song-meta">
             <span id="song-count">0 songs in queue</span>
+            <span id="analysis-status" class="analysis-status"></span>
           </div>
         </div>
       </section>
     </main>
-
     <script>
       const SIMULATOR_MODE = {{ 'true' if simulator_mode else 'false' }};
+      const THEME_COLOR = "{{ theme_color or '#5ab0f6' }}";
     </script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
   </body>
